@@ -5,7 +5,7 @@ import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
 import { HomePage } from '@/pages/HomePage'
 import { LoginPage } from '@/pages/LoginPage'
 import { RegisterPage } from '@/pages/RegisterPage'
-import { DashboardPage } from '@/pages/DashboardPage'
+import { ProfilePage } from '@/pages/ProfilePage'
 
 function App() {
   return (
@@ -17,10 +17,10 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route
-              path="/dashboard"
+              path="/profile"
               element={
                 <ProtectedRoute>
-                  <DashboardPage />
+                  <ProfilePage />
                 </ProtectedRoute>
               }
             />

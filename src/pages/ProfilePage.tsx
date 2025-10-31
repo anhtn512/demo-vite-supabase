@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { ChangePasswordForm } from '@/components/auth/ChangePasswordForm'
 import { User, Mail, Calendar } from 'lucide-react'
 
-export function DashboardPage() {
+export function ProfilePage() {
   const { user } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [fullName, setFullName] = useState(user?.user_metadata?.full_name || '')
@@ -27,9 +27,9 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <h1 className="text-3xl font-bold">Profile</h1>
         <p className="text-muted-foreground">Manage your account and view your information</p>
       </div>
 
