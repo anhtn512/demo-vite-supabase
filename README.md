@@ -55,103 +55,26 @@ A modern web application built with React, TypeScript, Vite, Tailwind CSS, and S
 src/      // Alternatively, use this for stricter rules
 
 ├── components/          # UI Components      tseslint.configs.strictTypeChecked,
-
 │   ├── ui/             # shadcn/ui primitives (Button, Card, Input, etc.)      // Optionally, add this for stylistic rules
-
 │   ├── layout/         # Layout components (Navbar, Layout, ProtectedRoute)      tseslint.configs.stylisticTypeChecked,
-
 │   └── auth/           # Authentication components (LoginForm, RegisterForm)
-
 ├── pages/              # Page components      // Other configs...
-
 │   ├── HomePage.tsx    ],
-
 │   ├── LoginPage.tsx    languageOptions: {
-
 │   ├── RegisterPage.tsx      parserOptions: {
-
 │   └── DashboardPage.tsx        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-
 ├── context/            # React Context providers        tsconfigRootDir: import.meta.dirname,
-
 │   └── AuthContext.tsx      },
-
 ├── lib/                # Core utilities & configurations      // other options...
-
 │   ├── supabase.ts     # Supabase client    },
-
 │   └── utils.ts        # Helper functions  },
-
 ├── types/              # TypeScript type definitions])
-
 │   └── auth.ts```
-
 ├── App.tsx             # Main app component with routing
+└── main.tsx            # Application entry point
 
-└── main.tsx            # Application entry pointYou can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```
-
-```js
-
-## Getting Started// eslint.config.js
-
-import reactX from 'eslint-plugin-react-x'
-
-### Prerequisitesimport reactDom from 'eslint-plugin-react-dom'
-
-
-
-- Node.js 18+ and npmexport default defineConfig([
-
-- A Supabase account and project  globalIgnores(['dist']),
-
-  {
-
-### Installation    files: ['**/*.{ts,tsx}'],
-
-    extends: [
-
-1. Clone the repository or use this template      // Other configs...
-
-      // Enable lint rules for React
-
-2. Install dependencies:      reactX.configs['recommended-typescript'],
-
-```bash      // Enable lint rules for React DOM
-
-npm install      reactDom.configs.recommended,
-
-```    ],
-
-    languageOptions: {
-
-3. Set up environment variables:      parserOptions: {
-
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-
-Create a `.env` file in the root directory:        tsconfigRootDir: import.meta.dirname,
-
-```env      },
-
-VITE_SUPABASE_URL=your_supabase_project_url      // other options...
-
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key    },
-
-```  },
-
-])
-
-To get these values:```
-
-- Go to [Supabase Dashboard](https://app.supabase.com)
-- Select your project
-- Go to Settings > API
-- Copy the "Project URL" and "anon public" key
-
-4. Start the development server:
-```bash
-npm run dev
 ```
 
 The app will be available at `http://localhost:5173` (or another port if 5173 is in use)
