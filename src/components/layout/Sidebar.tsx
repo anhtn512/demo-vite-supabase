@@ -15,7 +15,7 @@ export function Sidebar() {
   const isProfileActive = location.pathname.startsWith('/profile')
 
   return (
-    <aside className="w-64 border-r bg-background min-h-[calc(100vh-4rem)] sticky top-16">
+    <aside className="w-64 border-r bg-background min-h-screen">
       <nav className="p-4 space-y-2">
         <div className="mb-6">
           <h2 className="text-lg font-semibold px-2">Menu</h2>
