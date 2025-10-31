@@ -276,6 +276,21 @@ To add more shadcn/ui components, you can copy them from [shadcn/ui](https://ui.
 
 ## Deployment
 
+### 🐳 Deploy with Docker (Recommended)
+
+The easiest way to deploy this application is using Docker:
+
+```bash
+# Using Docker Compose
+docker-compose up -d
+
+# Or using Docker directly
+docker build -t sample-app .
+docker run -d -p 3000:80 sample-app
+```
+
+📖 See [DOCKER.md](./DOCKER.md) for detailed Docker deployment instructions.
+
 ### Build for Production
 
 ```bash
