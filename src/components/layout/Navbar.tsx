@@ -72,26 +72,26 @@ export function Navbar() {
   }
 
   return (
-    <nav className="border-b bg-background">
+    <nav className="bg-[rgb(245_247_249)]">
       <div className="max-w-6xl mx-auto px-10 py-3 flex items-center justify-between">
         {/* Breadcrumbs Section */}
         <div className="flex-1">
           {user && (
             <Breadcrumb>
-              <BreadcrumbList>
+              <BreadcrumbList className="text-base">
                 {breadcrumbs.map((item, index) => (
                   <div key={item.path} className="flex items-center">
-                    {index > 0 && <BreadcrumbSeparator />}
+                    {index > 0 && <BreadcrumbSeparator className="[&>svg]:size-4" />}
                     <BreadcrumbItem>
                       {index === breadcrumbs.length - 1 ? (
-                        <BreadcrumbPage className="flex items-center gap-1.5">
-                          {item.icon}
+                        <BreadcrumbPage className="flex items-center gap-2 text-base">
+                          <span className="[&>svg]:size-4">{item.icon}</span>
                           {item.label}
                         </BreadcrumbPage>
                       ) : (
                         <BreadcrumbLink asChild>
-                          <Link to={item.path} className="flex items-center gap-1.5">
-                            {item.icon}
+                          <Link to={item.path} className="flex items-center gap-2 text-base">
+                            <span className="[&>svg]:size-4">{item.icon}</span>
                             {item.label}
                           </Link>
                         </BreadcrumbLink>
@@ -107,11 +107,11 @@ export function Navbar() {
         {/* Actions Section */}
         <div className="flex items-center gap-3">
           {user ? (
-            <ButtonGroup>
+            <ButtonGroup className="bg-white shadow-sm">
               <button
                 onClick={toggleFullscreen}
                 aria-label="Toggle fullscreen"
-                className="inline-flex items-center justify-center h-9 w-9 hover:bg-accent hover:text-accent-foreground transition-colors"
+                className="inline-flex items-center justify-center h-10 w-10 hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
@@ -124,7 +124,7 @@ export function Navbar() {
               <button
                 onClick={toggleTheme}
                 aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-                className="inline-flex items-center justify-center h-9 w-9 hover:bg-accent hover:text-accent-foreground transition-colors"
+                className="inline-flex items-center justify-center h-10 w-10 hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 {isDark ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -148,7 +148,7 @@ export function Navbar() {
               <button
                 onClick={handleNotifications}
                 aria-label="Notifications"
-                className="inline-flex items-center justify-center h-9 w-9 hover:bg-accent hover:text-accent-foreground transition-colors"
+                className="inline-flex items-center justify-center h-10 w-10 hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
@@ -158,15 +158,15 @@ export function Navbar() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="inline-flex items-center justify-center h-9 w-9 rounded-full hover:bg-accent transition-colors">
-                    <Avatar className="h-5 w-5">
+                  <button className="inline-flex items-center justify-center h-10 w-10 rounded-full hover:bg-accent transition-colors">
+                    <Avatar className="h-6 w-6">
                       <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                         {getInitials(user.email || 'US')}
                       </AvatarFallback>
                     </Avatar>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuContent className="w-56 bg-white" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">My Account</p>
