@@ -27,7 +27,7 @@ export function Navbar() {
 
   return (
     <nav className="border-b bg-background">
-      <div className="px-4 py-3 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-10 py-3 flex items-center justify-between">
         <Link to="/" className="text-xl font-bold">
           My App
         </Link>
