@@ -2,7 +2,16 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
+import { ButtonGroup } from '@/components/ui/button-group'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,10 +21,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { LogOut, User, Settings, Bell, Sun, Moon, Maximize2 } from 'lucide-react'
+import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 
 export function Navbar() {
   const { user, signOut } = useAuth()
   const navigate = useNavigate()
+  const breadcrumbs = useBreadcrumbs()
   const [isDark, setIsDark] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
     const stored = localStorage.getItem('theme')
@@ -63,12 +74,41 @@ export function Navbar() {
   return (
     <nav className="border-b bg-background">
       <div className="max-w-6xl mx-auto px-10 py-3 flex items-center justify-between">
-        <div />
+        {/* Breadcrumbs Section */}
+        <div className="flex-1">
+          {user && (
+            <Breadcrumb>
+              <BreadcrumbList>
+                {breadcrumbs.map((item, index) => (
+                  <div key={item.path} className="flex items-center">
+                    {index > 0 && <BreadcrumbSeparator />}
+                    <BreadcrumbItem>
+                      {index === breadcrumbs.length - 1 ? (
+                        <BreadcrumbPage className="flex items-center gap-1.5">
+                          {item.icon}
+                          {item.label}
+                        </BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink asChild>
+                          <Link to={item.path} className="flex items-center gap-1.5">
+                            {item.icon}
+                            {item.label}
+                          </Link>
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                  </div>
+                ))}
+              </BreadcrumbList>
+            </Breadcrumb>
+          )}
+        </div>
         
+        {/* Actions Section */}
         <div className="flex items-center gap-3">
           {user ? (
             <>
-              <div className="flex items-center gap-2">
+              <ButtonGroup>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -95,7 +135,7 @@ export function Navbar() {
                 >
                   <Bell className="h-4 w-4" />
                 </Button>
-              </div>
+              </ButtonGroup>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
