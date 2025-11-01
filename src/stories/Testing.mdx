@@ -1,0 +1,292 @@
+# Testing Components
+
+Storybook tích hợp với **Vitest** để cho phép testing components trực tiếp từ stories.
+
+## Chạy Tests
+
+### Run All Tests
+```bash
+npx vitest --project=storybook
+```
+
+### Watch Mode
+```bash
+npx vitest --project=storybook --watch
+```
+
+### Coverage Report
+```bash
+npx vitest --project=storybook --coverage
+```
+
+## Test Structure
+
+Mỗi story có thể được test tự động. Stories đóng vai trò như test cases:
+
+```tsx
+// Component.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
+
+const meta: Meta<typeof Button> = {
+  title: 'UI/Button',
+  component: Button,
+};
+
+export default meta;
+type Story = StoryObj<typeof Button>;
+
+// Mỗi story này có thể được test
+export const Default: Story = {
+  args: {
+    children: 'Click me',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    children: 'Disabled',
+    disabled: true,
+  },
+};
+```
+
+## Vitest Integration
+
+### Configuration
+
+File cấu hình test đã được tạo tại `.storybook/vitest.setup.ts`:
+
+```typescript
+import { beforeAll } from 'vitest';
+import { setProjectAnnotations } from '@storybook/react';
+import * as projectAnnotations from './preview';
+
+beforeAll(async () => {
+  await setProjectAnnotations(projectAnnotations);
+});
+```
+
+### Vite Config
+
+File `vite.config.ts` đã được cập nhật để support testing:
+
+```typescript
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    name: 'storybook',
+    browser: {
+      enabled: true,
+      provider: 'playwright',
+      name: 'chromium',
+    },
+    setupFiles: ['.storybook/vitest.setup.ts'],
+  },
+});
+```
+
+## Writing Tests
+
+### Basic Test
+```tsx
+import { test, expect } from 'vitest';
+import { composeStories } from '@storybook/react';
+import * as ButtonStories from './Button.stories';
+
+const { Default, Disabled } = composeStories(ButtonStories);
+
+test('renders button with text', async () => {
+  const { getByText } = await Default.render();
+  expect(getByText('Click me')).toBeInTheDocument();
+});
+
+test('button is disabled when disabled prop is true', async () => {
+  const { getByRole } = await Disabled.render();
+  expect(getByRole('button')).toBeDisabled();
+});
+```
+
+### Testing User Interactions
+```tsx
+import { test, expect } from 'vitest';
+import { userEvent } from '@storybook/test';
+import { composeStories } from '@storybook/react';
+import * as ButtonStories from './Button.stories';
+
+const { Default } = composeStories(ButtonStories);
+
+test('calls onClick handler when clicked', async () => {
+  const onClickSpy = vi.fn();
+  const { getByRole } = await Default.render({
+    onClick: onClickSpy,
+  });
+  
+  const button = getByRole('button');
+  await userEvent.click(button);
+  
+  expect(onClickSpy).toHaveBeenCalledTimes(1);
+});
+```
+
+### Testing Forms
+```tsx
+import { test, expect } from 'vitest';
+import { userEvent } from '@storybook/test';
+import { composeStories } from '@storybook/react';
+import * as LoginFormStories from './LoginForm.stories';
+
+const { Default } = composeStories(LoginFormStories);
+
+test('submits form with email and password', async () => {
+  const { getByLabelText, getByRole } = await Default.render();
+  
+  await userEvent.type(getByLabelText(/email/i), 'test@example.com');
+  await userEvent.type(getByLabelText(/password/i), 'password123');
+  await userEvent.click(getByRole('button', { name: /sign in/i }));
+  
+  // Assert expectations
+});
+```
+
+## Accessibility Testing
+
+### Visual Accessibility Checks
+
+Storybook's a11y addon tự động kiểm tra accessibility issues:
+
+1. Mở story trong Storybook
+2. Click tab "Accessibility"
+3. Xem violations và suggestions
+
+### Automated A11y Tests
+```tsx
+import { test, expect } from 'vitest';
+import { composeStories } from '@storybook/react';
+import { axe, toHaveNoViolations } from 'jest-axe';
+import * as ButtonStories from './Button.stories';
+
+expect.extend(toHaveNoViolations);
+
+const { Default } = composeStories(ButtonStories);
+
+test('has no accessibility violations', async () => {
+  const { container } = await Default.render();
+  const results = await axe(container);
+  expect(results).toHaveNoViolations();
+});
+```
+
+## Best Practices
+
+### 1. Test Stories, Not Components
+✅ **Do**: Test từ stories
+```tsx
+import * as stories from './Button.stories';
+const { Default } = composeStories(stories);
+```
+
+❌ **Don't**: Import component trực tiếp
+```tsx
+import { Button } from './Button';
+```
+
+### 2. Test User Behavior
+Focus vào những gì user thấy và làm:
+```tsx
+// ✅ Good - test user interaction
+expect(getByRole('button')).toBeInTheDocument();
+expect(getByText('Submit')).toBeVisible();
+
+// ❌ Bad - test implementation details
+expect(component.state.isLoading).toBe(false);
+```
+
+### 3. Use Semantic Queries
+```tsx
+// ✅ Good
+getByRole('button', { name: /submit/i })
+getByLabelText(/email/i)
+
+// ❌ Bad
+getByTestId('submit-button')
+getByClassName('email-input')
+```
+
+### 4. Test Multiple States
+Tạo stories cho mỗi state và test tất cả:
+```tsx
+export const Loading: Story = { args: { isLoading: true } };
+export const Error: Story = { args: { error: 'Error message' } };
+export const Success: Story = { args: { data: mockData } };
+
+// Test all states
+test('shows loading spinner', ...);
+test('displays error message', ...);
+test('renders data correctly', ...);
+```
+
+## Coverage
+
+### Check Coverage
+```bash
+npx vitest --project=storybook --coverage
+```
+
+### Coverage Report
+Coverage reports được tạo trong thư mục `coverage/`:
+- `coverage/index.html` - HTML report
+- `coverage/lcov.info` - LCOV format
+
+### Target Coverage
+Mục tiêu tốt:
+- **Statements**: > 80%
+- **Branches**: > 75%
+- **Functions**: > 80%
+- **Lines**: > 80%
+
+## Debugging Tests
+
+### Debug in Browser
+```bash
+npx vitest --project=storybook --ui
+```
+
+### Debug Output
+```tsx
+test('debug example', async () => {
+  const { debug } = await Default.render();
+  debug(); // Prints DOM tree
+});
+```
+
+### Browser DevTools
+Khi chạy trong browser mode, bạn có thể sử dụng Chrome DevTools để debug.
+
+## CI/CD Integration
+
+### GitHub Actions
+```yaml
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx vitest --project=storybook --run
+```
+
+## Resources
+
+- [Storybook Testing Docs](https://storybook.js.org/docs/react/writing-tests/introduction)
+- [Vitest Documentation](https://vitest.dev)
+- [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- [jest-axe](https://github.com/nickcolley/jest-axe)

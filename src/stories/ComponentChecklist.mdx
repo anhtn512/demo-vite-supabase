@@ -1,0 +1,318 @@
+# Component Development Checklist
+
+Checklist này giúp đảm bảo tất cả components được phát triển theo best practices.
+
+## ✅ Component Creation Checklist
+
+### 1. Component Structure
+- [ ] Component được tạo trong thư mục phù hợp (`src/components/ui/` hoặc `src/components/`)
+- [ ] File TypeScript với đuôi `.tsx`
+- [ ] Component sử dụng `React.forwardRef` nếu cần ref
+- [ ] Props interface được định nghĩa rõ ràng với TypeScript
+- [ ] Component có `displayName` cho debugging
+
+```tsx
+// ✅ Good example
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, ...props }, ref) => {
+    return <button ref={ref} className={cn('base-classes', className)} {...props} />
+  }
+)
+Button.displayName = 'Button'
+```
+
+### 2. Styling
+- [ ] Sử dụng Tailwind CSS classes
+- [ ] Sử dụng `cn()` utility để merge classes
+- [ ] Support custom className prop
+- [ ] Responsive design với breakpoints
+- [ ] Dark mode support (nếu cần)
+
+```tsx
+// ✅ Good
+className={cn('base-classes', 'hover:bg-gray-100', className)}
+
+// ❌ Bad
+className={'base-classes ' + className}
+```
+
+### 3. Variants (nếu có)
+- [ ] Sử dụng `cva` (class-variance-authority) cho variants
+- [ ] Định nghĩa defaultVariants
+- [ ] Export variants type với `VariantProps`
+- [ ] Document tất cả variants trong stories
+
+```tsx
+const buttonVariants = cva('base', {
+  variants: {
+    variant: {
+      default: 'bg-primary',
+      outline: 'border',
+    },
+    size: {
+      sm: 'px-2 py-1',
+      lg: 'px-6 py-3',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'sm',
+  },
+})
+```
+
+### 4. Accessibility
+- [ ] Semantic HTML elements được sử dụng
+- [ ] ARIA attributes khi cần thiết
+- [ ] Keyboard navigation support
+- [ ] Focus states rõ ràng
+- [ ] Screen reader friendly
+- [ ] Color contrast đạt WCAG AA
+
+```tsx
+// ✅ Good - semantic & accessible
+<button 
+  role="button"
+  aria-label="Close dialog"
+  aria-pressed={isPressed}
+>
+
+// ❌ Bad - div as button
+<div onClick={handler}>Click</div>
+```
+
+## ✅ Storybook Stories Checklist
+
+### 1. Story File Setup
+- [ ] File `.stories.tsx` cùng thư mục với component
+- [ ] Import types từ `@storybook/react`
+- [ ] Define Meta với title, component, parameters
+- [ ] Add `tags: ['autodocs']` cho auto documentation
+- [ ] Export default meta
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { MyComponent } from './MyComponent';
+
+const meta: Meta<typeof MyComponent> = {
+  title: 'Category/MyComponent',
+  component: MyComponent,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+};
+
+export default meta;
+type Story = StoryObj<typeof MyComponent>;
+```
+
+### 2. Story Variations
+- [ ] **Default** story - basic usage
+- [ ] **All variants** - nếu component có variants
+- [ ] **Interactive** story - với controls
+- [ ] **Edge cases** - empty, loading, error states
+- [ ] **Composition** story - component trong context thực tế
+
+Minimum stories cần có:
+```tsx
+export const Default: Story = { /* ... */ };
+export const AllVariants: Story = { /* ... */ };
+export const Interactive: Story = { /* ... */ };
+```
+
+### 3. Controls & ArgTypes
+- [ ] ArgTypes được define cho props quan trọng
+- [ ] Controls type phù hợp (select, boolean, text, number)
+- [ ] Options được cung cấp cho select controls
+- [ ] Default values được set
+
+```tsx
+argTypes: {
+  variant: {
+    control: 'select',
+    options: ['default', 'primary', 'secondary'],
+    description: 'Button variant',
+  },
+  disabled: {
+    control: 'boolean',
+  },
+  size: {
+    control: 'select',
+    options: ['sm', 'md', 'lg'],
+  },
+}
+```
+
+### 4. Documentation
+- [ ] Component description trong meta.parameters.docs
+- [ ] Props documented với JSDoc comments
+- [ ] Usage examples trong stories
+- [ ] Edge cases documented
+
+```tsx
+parameters: {
+  docs: {
+    description: {
+      component: 'A versatile button component with multiple variants.',
+    },
+  },
+}
+```
+
+## ✅ Testing Checklist
+
+### 1. Basic Tests
+- [ ] Component renders without crashing
+- [ ] Props được áp dụng đúng
+- [ ] Default values hoạt động
+- [ ] Custom className được merge đúng
+
+### 2. Interaction Tests
+- [ ] User interactions (click, hover, focus)
+- [ ] Keyboard navigation
+- [ ] Form submissions (nếu có)
+- [ ] State changes
+
+### 3. Accessibility Tests
+- [ ] No a11y violations trong Storybook
+- [ ] Keyboard navigation works
+- [ ] Screen reader labels
+- [ ] Focus indicators visible
+
+### 4. Visual Tests
+- [ ] All variants render correctly
+- [ ] Responsive behavior
+- [ ] Dark mode (if applicable)
+
+## ✅ Code Quality Checklist
+
+### 1. TypeScript
+- [ ] Proper type definitions
+- [ ] No `any` types
+- [ ] Props interface exported
+- [ ] Generic types used correctly
+
+### 2. Performance
+- [ ] React.memo nếu cần thiết
+- [ ] useCallback cho event handlers
+- [ ] useMemo cho expensive calculations
+- [ ] No unnecessary re-renders
+
+### 3. Code Style
+- [ ] ESLint passes without errors
+- [ ] Consistent naming conventions
+- [ ] Clean, readable code
+- [ ] Comments cho logic phức tạp
+
+## ✅ Documentation Checklist
+
+### 1. README/Docs
+- [ ] Component usage documented
+- [ ] Props table (auto-generated in Storybook)
+- [ ] Examples provided
+- [ ] Known issues/limitations noted
+
+### 2. Comments
+- [ ] Complex logic explained
+- [ ] Prop descriptions (JSDoc)
+- [ ] Type definitions documented
+- [ ] TODO/FIXME with context
+
+## Example Complete Component
+
+```tsx
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+
+const myComponentVariants = cva(
+  "base-classes",
+  {
+    variants: {
+      variant: {
+        default: "variant-classes",
+        secondary: "variant-classes",
+      },
+      size: {
+        sm: "size-classes",
+        lg: "size-classes",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "sm",
+    },
+  }
+)
+
+export interface MyComponentProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof myComponentVariants> {
+  /**
+   * Additional prop description
+   */
+  someProp?: string
+}
+
+/**
+ * MyComponent description
+ * 
+ * @example
+ * ```tsx
+ * <MyComponent variant="default" size="lg">Content</MyComponent>
+ * ```
+ */
+const MyComponent = React.forwardRef<HTMLDivElement, MyComponentProps>(
+  ({ className, variant, size, someProp, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(myComponentVariants({ variant, size, className }))}
+        {...props}
+      />
+    )
+  }
+)
+MyComponent.displayName = "MyComponent"
+
+export { MyComponent, myComponentVariants }
+```
+
+## Pre-Commit Checklist
+
+Trước khi commit:
+- [ ] `npm run lint` - No errors
+- [ ] `npm run build` - Builds successfully
+- [ ] `npm run storybook` - Storybook runs without errors
+- [ ] Manual testing in browser
+- [ ] All stories work correctly
+- [ ] Accessibility tab shows no critical issues
+
+## Pull Request Checklist
+
+Trước khi tạo PR:
+- [ ] All checklist items above completed
+- [ ] Component documented in Storybook
+- [ ] Tests written and passing
+- [ ] Screenshots added to PR (if visual changes)
+- [ ] Breaking changes noted
+- [ ] Migration guide (if needed)
+
+---
+
+## Quick Start Template
+
+Copy template này khi tạo component mới:
+
+```bash
+# 1. Tạo component file
+touch src/components/ui/MyComponent.tsx
+
+# 2. Tạo stories file
+touch src/components/ui/MyComponent.stories.tsx
+
+# 3. Copy templates từ existing components
+# 4. Follow checklist above
+# 5. Test in Storybook: npm run storybook
+```

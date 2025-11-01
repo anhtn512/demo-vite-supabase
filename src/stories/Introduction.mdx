@@ -1,0 +1,93 @@
+# Welcome to Storybook
+
+Storybook giúp bạn xây dựng các UI components một cách độc lập và có tổ chức.
+
+## Tính năng
+
+### 🎨 Component Development
+Phát triển và kiểm tra components UI riêng biệt mà không cần chạy toàn bộ ứng dụng.
+
+### 📖 Documentation
+Tự động tạo documentation cho các components với props, types và examples.
+
+### ♿ Accessibility Testing
+Tích hợp addon a11y để kiểm tra khả năng tiếp cận của components.
+
+### 🧪 Visual Testing
+Test và review các components trong nhiều trạng thái khác nhau.
+
+## Cấu trúc dự án
+
+```
+src/
+├── components/
+│   ├── ui/              # UI Components cơ bản
+│   │   ├── button.tsx
+│   │   ├── button.stories.tsx
+│   │   ├── input.tsx
+│   │   ├── input.stories.tsx
+│   │   ├── card.tsx
+│   │   └── card.stories.tsx
+│   └── auth/            # Authentication Components
+│       ├── LoginForm.tsx
+│       └── LoginForm.stories.tsx
+```
+
+## Cách sử dụng
+
+### Chạy Storybook
+```bash
+npm run storybook
+```
+
+### Build Storybook
+```bash
+npm run build-storybook
+```
+
+### Tạo Story mới
+
+Tạo file `ComponentName.stories.tsx` bên cạnh component của bạn:
+
+```typescript
+import type { Meta, StoryObj } from '@storybook/react';
+import { YourComponent } from './YourComponent';
+
+const meta: Meta<typeof YourComponent> = {
+  title: 'Category/YourComponent',
+  component: YourComponent,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+};
+
+export default meta;
+type Story = StoryObj<typeof YourComponent>;
+
+export const Default: Story = {
+  args: {
+    // component props
+  },
+};
+```
+
+## Addons đã cài đặt
+
+- **@storybook/addon-docs** - Tự động tạo documentation
+- **@storybook/addon-a11y** - Kiểm tra accessibility
+- **@storybook/addon-vitest** - Integration testing với Vitest
+- **@chromatic-com/storybook** - Visual regression testing
+
+## Tips
+
+1. **Sử dụng Controls**: Thử nghiệm với props của components trực tiếp trong Storybook UI
+2. **Check Accessibility**: Sử dụng tab "Accessibility" để kiểm tra a11y issues
+3. **Multiple Stories**: Tạo nhiều stories cho các trạng thái khác nhau của component
+4. **ArgTypes**: Định nghĩa argTypes để tùy chỉnh controls
+
+## Resources
+
+- [Storybook Documentation](https://storybook.js.org/docs)
+- [Best Practices](https://storybook.js.org/docs/react/writing-stories/introduction)
+- [Addon Gallery](https://storybook.js.org/addons)

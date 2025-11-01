@@ -144,6 +144,38 @@ create trigger on_auth_user_created
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build locally
 - `npm run lint` - Run ESLint
+- `npm run storybook` - Start Storybook UI development environment
+- `npm run build-storybook` - Build static Storybook site
+
+## 📚 Storybook
+
+Dự án này đã tích hợp **Storybook** để phát triển và quản lý UI components.
+
+### Chạy Storybook
+
+```bash
+npm run storybook
+```
+
+Storybook sẽ chạy tại: http://localhost:6006
+
+### Tính năng Storybook
+
+- ✅ **Interactive Component Development** - Phát triển components độc lập
+- ✅ **Auto Documentation** - Tự động tạo docs với props & examples
+- ✅ **Accessibility Testing** - Kiểm tra a11y với addon-a11y
+- ✅ **Visual Testing** - Test nhiều states và variants
+- ✅ **Component Testing** - Integration với Vitest
+
+### Components có Storybook
+
+- Button (default, destructive, outline, secondary, ghost, link)
+- Input (text, email, password, search)
+- Card (với header, content, footer)
+- Avatar (với image và fallback)
+- LoginForm (complete authentication form)
+
+📖 Xem thêm chi tiết trong [STORYBOOK.md](./STORYBOOK.md)
 
 ## Features Walkthrough
 
