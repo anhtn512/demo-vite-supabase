@@ -8,8 +8,10 @@ export function Layout() {
       <Sidebar />
       <div className="flex flex-col flex-1">
         <Navbar />
-        <main className="flex-1 px-10 py-8">
-          <Outlet />
+        <main className="flex-1 py-8">
+          <div className="max-w-6xl mx-auto px-10">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

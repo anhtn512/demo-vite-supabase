@@ -20,7 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { LogOut, User, Settings, Bell, Sun, Moon, Maximize2 } from 'lucide-react'
+import { LogOut, User, Settings } from 'lucide-react'
 import { useBreadcrumbs } from '@/hooks/useBreadcrumbs'
 
 export function Navbar() {
@@ -107,45 +107,64 @@ export function Navbar() {
         {/* Actions Section */}
         <div className="flex items-center gap-3">
           {user ? (
-            <>
-              <ButtonGroup>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleFullscreen}
-                  aria-label="Toggle fullscreen"
-                >
-                  <Maximize2 className="h-4 w-4" />
-                </Button>
+            <ButtonGroup>
+              <button
+                onClick={toggleFullscreen}
+                aria-label="Toggle fullscreen"
+                className="inline-flex items-center justify-center h-9 w-9 hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+                  <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
+                  <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+                  <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+                </svg>
+              </button>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleTheme}
-                  aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-                >
-                  {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                </Button>
+              <button
+                onClick={toggleTheme}
+                aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+                className="inline-flex items-center justify-center h-9 w-9 hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                {isDark ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="4"/>
+                    <path d="M12 2v2"/>
+                    <path d="M12 20v2"/>
+                    <path d="m4.93 4.93 1.41 1.41"/>
+                    <path d="m17.66 17.66 1.41 1.41"/>
+                    <path d="M2 12h2"/>
+                    <path d="M20 12h2"/>
+                    <path d="m6.34 17.66-1.41 1.41"/>
+                    <path d="m19.07 4.93-1.41 1.41"/>
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                  </svg>
+                )}
+              </button>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleNotifications}
-                  aria-label="Notifications"
-                >
-                  <Bell className="h-4 w-4" />
-                </Button>
-              </ButtonGroup>
+              <button
+                onClick={handleNotifications}
+                aria-label="Notifications"
+                className="inline-flex items-center justify-center h-9 w-9 hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                  <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                </svg>
+              </button>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar className="h-10 w-10">
-                      <AvatarFallback className="bg-primary text-primary-foreground">
+                  <button className="inline-flex items-center justify-center h-9 w-9 rounded-full hover:bg-accent transition-colors">
+                    <Avatar className="h-5 w-5">
+                      <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                         {getInitials(user.email || 'US')}
                       </AvatarFallback>
                     </Avatar>
-                  </Button>
+                  </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
@@ -172,7 +191,7 @@ export function Navbar() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </>
+            </ButtonGroup>
           ) : (
             <>
               <Link to="/login">
