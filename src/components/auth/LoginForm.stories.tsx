@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { LoginForm } from './LoginForm';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { AuthProvider } from '@/context/AuthContext';
 
 const meta: Meta<typeof LoginForm> = {
@@ -12,13 +12,13 @@ const meta: Meta<typeof LoginForm> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <BrowserRouter>
+      <MemoryRouter>
         <AuthProvider>
           <div className="min-h-screen flex items-center justify-center p-4">
             <Story />
           </div>
         </AuthProvider>
-      </BrowserRouter>
+      </MemoryRouter>
     ),
   ],
 };
@@ -31,13 +31,9 @@ export const Default: Story = {};
 export const WithBackground: Story = {
   decorators: [
     (Story) => (
-      <BrowserRouter>
-        <AuthProvider>
-          <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-indigo-100">
-            <Story />
-          </div>
-        </AuthProvider>
-      </BrowserRouter>
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-indigo-100">
+        <Story />
+      </div>
     ),
   ],
 };
